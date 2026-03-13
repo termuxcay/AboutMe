@@ -50,6 +50,11 @@ const gooseSVG = `
                 
                 <!-- Cabeça -->
                 <circle cx="80" cy="22" r="11" fill="white"/>
+
+                <!-- Boina Duck Shelby -->
+                <path d="M68,16 Q80,10 94,16 L94,19 Q80,23 68,19 Z" fill="#333" />
+                <ellipse cx="80" cy="16" rx="13" ry="5" fill="#444" />
+                <circle cx="80" cy="14" r="1" fill="#222" />
                 
                 <!-- Bico -->
                 <path d="M88,18 L98,20 L98,26 L88,26 Z" fill="orange"/>
@@ -251,10 +256,11 @@ async function startGooseChaos() {
     });
 
     const h1 = document.createElement('h1');
-    h1.innerHTML = "SECURITY ALERT:<br>GOOSE PATROL ACTIVE";
-    h1.style.fontSize = '2.5rem';
+    h1.innerHTML = "DUCK SHELBY:<br>PROTEGENDO A ORDEM DOS PATOS PELO SRTERMAX";
+    h1.style.fontSize = '2rem';
     h1.style.textAlign = 'center';
     h1.style.marginBottom = '20px';
+    h1.style.lineHeight = '1.5';
     document.body.appendChild(h1);
 
     const img = document.createElement('div');
