@@ -222,8 +222,10 @@ async function startGooseChaos() {
     await walkTo(window.innerWidth / 2, window.innerHeight / 2);
     await honk("QUACK!");
     
-    // 2. Caça aos elementos
-    const targets = Array.from(document.querySelectorAll('h1, h2, p, li, a, i, .rounded-lg'));
+    // 2. Caça aos elementos (Lista expandida)
+    const targets = Array.from(document.querySelectorAll(
+        'h1, h2, p, li, a, i, span, div.rounded-lg, nav, footer, .text-xs'
+    ));
     
     for (const target of targets) {
         if (!target.isConnected || target.style.display === 'none') continue;
