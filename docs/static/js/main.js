@@ -13,51 +13,49 @@ document.addEventListener('contextmenu', function(e) {
 let goose;
 let isGooseActive = false;
 
-// SVG do Ganso Melhorado (Articulado para animação)
+// SVG do Ganso (Visual Desktop Goose Style - Mais Limpo)
 const gooseSVG = `
-<svg viewBox="0 0 120 120" width="100%" height="100%" style="overflow: visible;">
-    <defs>
-        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
-            <feOffset dx="2" dy="4" result="offsetblur"/>
-            <feComponentTransfer>
-                <feFuncA type="linear" slope="0.3"/>
-            </feComponentTransfer>
-            <feMerge> 
-                <feMergeNode in="offsetblur"/>
-                <feMergeNode in="SourceGraphic"/> 
-            </feMerge>
-        </filter>
-    </defs>
-    <g id="goose-container" filter="url(#shadow)">
-        <!-- Perna Traseira (Laranja Escuro) -->
-        <g id="leg-back" transform="translate(60, 85)">
-            <path d="M0,0 L0,15 L10,15" stroke="#e07c00" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<svg viewBox="0 0 100 100" width="100%" height="100%" style="overflow: visible;">
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
+        <feOffset dx="1" dy="2" result="offsetblur"/>
+        <feComponentTransfer>
+            <feFuncA type="linear" slope="0.3"/>
+        </feComponentTransfer>
+        <feMerge> 
+            <feMergeNode in="offsetblur"/>
+            <feMergeNode in="SourceGraphic"/> 
+        </feMerge>
+    </filter>
+    
+    <g id="goose-body" filter="url(#shadow)">
+        <!-- Pernas -->
+        <g id="legs" transform="translate(50, 75)">
+            <path id="leg-left" d="M-5,0 L-5,12 L-12,12" stroke="orange" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path id="leg-right" d="M5,0 L5,12 L12,12" stroke="#e07c00" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
         </g>
 
-        <!-- Perna Dianteira (Laranja Claro) -->
-        <g id="leg-front" transform="translate(45, 85)">
-            <path d="M0,0 L0,15 L10,15" stroke="orange" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        </g>
-        
-        <!-- Corpo (Branco) -->
+        <!-- Corpo Principal -->
         <g id="body-group">
-            <!-- Corpo Principal -->
-            <path d="M30,60 Q30,40 60,40 L80,40 Q100,40 100,60 Q100,85 70,85 L45,85 Q30,85 30,60 Z" fill="white"/>
+            <!-- Corpo -->
+            <path d="M25,60 Q25,45 50,45 L65,45 Q85,45 85,60 Q85,78 60,78 L40,78 Q25,78 25,60 Z" fill="white"/>
             
             <!-- Asa -->
-            <path d="M45,55 Q55,45 80,55 Q90,65 80,75 Q60,80 45,70" fill="white" stroke="#e5e7eb" stroke-width="2"/>
+            <path d="M40,55 Q50,55 65,55 Q75,60 70,70 Q55,72 40,65" fill="white" stroke="#e5e7eb" stroke-width="2"/>
             
-            <!-- Pescoço e Cabeça -->
-            <g id="neck-head" transform="translate(85, 50)">
+            <!-- Pescoço e Cabeça (Mais proporcional) -->
+            <g id="neck-head">
                 <!-- Pescoço -->
-                <path d="M0,0 Q10,-20 10,-35 Q10,-50 -5,-50" fill="none" stroke="white" stroke-width="18" stroke-linecap="round"/>
+                <path d="M75,50 Q80,35 80,25" fill="none" stroke="white" stroke-width="14" stroke-linecap="round"/>
+                
                 <!-- Cabeça -->
-                <circle cx="-5" cy="-50" r="14" fill="white"/>
+                <circle cx="80" cy="22" r="11" fill="white"/>
+                
                 <!-- Bico -->
-                <path d="M5,-54 L22,-52 L22,-44 L5,-46 Z" fill="orange"/>
+                <path d="M88,18 L98,20 L98,26 L88,26 Z" fill="orange"/>
+                
                 <!-- Olho -->
-                <circle cx="0" cy="-54" r="2" fill="black"/>
+                <circle cx="83" cy="19" r="1.5" fill="black"/>
             </g>
         </g>
     </g>
@@ -76,77 +74,69 @@ async function startGooseChaos() {
     // Configuração inicial
     Object.assign(goose.style, {
         position: 'fixed',
-        width: '120px', // Maior para ver detalhes
-        height: '120px',
+        width: '100px',
+        height: '100px',
         zIndex: '100000',
         pointerEvents: 'none',
-        left: '-150px', // Começa fora
+        left: '-150px',
         top: '50%',
-        willChange: 'left, top, transform', // Otimização de performance
+        willChange: 'left, top, transform',
     });
     document.body.appendChild(goose);
 
-    // CSS das animações realistas
+    // CSS das animações
     const style = document.createElement('style');
     style.innerHTML = `
-        /* Animação das pernas (caminhada) */
-        @keyframes walk-leg {
-            0% { transform: translate(45px, 85px) rotate(-20deg); }
-            50% { transform: translate(45px, 85px) rotate(30deg); }
-            100% { transform: translate(45px, 85px) rotate(-20deg); }
-        }
-        @keyframes walk-leg-back {
-            0% { transform: translate(60px, 85px) rotate(30deg); }
-            50% { transform: translate(60px, 85px) rotate(-20deg); }
-            100% { transform: translate(60px, 85px) rotate(30deg); }
+        /* Animação das pernas */
+        @keyframes walk {
+            0% { transform: translateY(0); }
+            25% { transform: translateY(-2px); }
+            50% { transform: translateY(0); }
+            75% { transform: translateY(-2px); }
+            100% { transform: translateY(0); }
         }
         
-        /* Animação do corpo (balanço) */
-        @keyframes body-bob {
-            0% { transform: translateY(0px) rotate(0deg); }
-            25% { transform: translateY(-3px) rotate(1deg); }
-            50% { transform: translateY(0px) rotate(0deg); }
-            75% { transform: translateY(-3px) rotate(-1deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+        @keyframes leg-move {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(4px); }
+            100% { transform: translateX(0); }
         }
 
-        /* Classes ativas */
-        .goose-walking #leg-front {
-            animation: walk-leg 0.4s infinite linear;
-            transform-origin: 0 0; /* Articulação no topo da perna */
-        }
-        .goose-walking #leg-back {
-            animation: walk-leg-back 0.4s infinite linear;
-            transform-origin: 0 0;
-        }
         .goose-walking #body-group {
-            animation: body-bob 0.4s infinite ease-in-out;
+            animation: walk 0.3s infinite ease-in-out;
+        }
+        
+        .goose-walking #leg-left {
+            animation: leg-move 0.3s infinite reverse;
+        }
+        .goose-walking #leg-right {
+            animation: leg-move 0.3s infinite;
         }
 
         /* Balão de texto */
         .honk-bubble {
             position: absolute;
-            top: 0px;
+            top: -10px;
             left: 80px;
             background: white;
             border: 3px solid black;
             padding: 8px 12px;
-            border-radius: 12px;
-            border-bottom-left-radius: 0;
+            border-radius: 8px;
             font-weight: 900;
-            font-family: 'Arial Black', sans-serif;
-            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
             color: black;
-            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.2);
             white-space: nowrap;
             opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.8);
+            transition: opacity 0.1s, transform 0.1s;
             z-index: 100001;
+            pointer-events: none;
         }
         .honk-visible {
             opacity: 1;
-            transform: scale(1) rotate(-10deg);
+            transform: scale(1);
         }
     `;
     document.head.appendChild(style);
@@ -157,136 +147,119 @@ async function startGooseChaos() {
     honkBubble.innerText = 'HONK!';
     goose.appendChild(honkBubble);
 
-    // Elementos do SVG para animar
-    const legFront = goose.querySelector('#leg-front');
-    const legBack = goose.querySelector('#leg-back');
-
-    // Função Honk (Rápida e agressiva)
+    // Função Honk
     const honk = async (text = 'HONK!') => {
         honkBubble.innerText = text;
         honkBubble.classList.add('honk-visible');
         
-        // Vibração do ganso ao grasnar
-        goose.style.transform += ' scale(1.1)';
+        // Pequeno pulo
+        const svg = goose.querySelector('svg');
+        svg.style.transform += ' translateY(-5px)';
         setTimeout(() => {
-            goose.style.transform = goose.style.transform.replace(' scale(1.1)', '');
+            svg.style.transform = svg.style.transform.replace(' translateY(-5px)', '');
         }, 100);
 
-        await new Promise(r => setTimeout(r, 600));
+        await new Promise(r => setTimeout(r, 800));
         honkBubble.classList.remove('honk-visible');
     };
 
-    // Função de espera
     const wait = (ms) => new Promise(r => setTimeout(r, ms));
 
-    // Função Andar (Mais inteligente)
+    // Função Andar
     const walkTo = async (x, y) => {
         const currentLeft = parseFloat(getComputedStyle(goose).left);
         const currentTop = parseFloat(getComputedStyle(goose).top);
         
-        // Ajuste para o centro do ganso (aprox 60x60)
-        const targetX = x - 60;
-        const targetY = y - 60;
+        const targetX = x - 50; // Centraliza (100px width / 2)
+        const targetY = y - 50; // Centraliza
 
-        // Direção
         const isGoingRight = targetX > currentLeft;
         
-        // Espelhar o ganso corretamente
-        const scaleX = isGoingRight ? 1 : -1;
-        goose.querySelector('svg').style.transform = `scaleX(${scaleX})`;
-        
-        // Ajustar balão para não ficar invertido
-        honkBubble.style.transform = isGoingRight ? 'rotate(0deg)' : 'scaleX(-1) rotate(0deg)';
-        honkBubble.style.left = isGoingRight ? '80px' : '20px';
+        // Espelhar APENAS o SVG, não o container (para não inverter o texto)
+        const svg = goose.querySelector('svg');
+        if (isGoingRight) {
+            svg.style.transform = 'scaleX(1)';
+            honkBubble.style.left = '80px'; // Balão na direita
+        } else {
+            svg.style.transform = 'scaleX(-1)';
+            honkBubble.style.left = '-20px'; // Balão na esquerda
+        }
 
-        // Ativa animação
         goose.classList.add('goose-walking');
         
-        // Velocidade mais rápida (0.6px/ms)
         const dist = Math.sqrt(Math.pow(targetX - currentLeft, 2) + Math.pow(targetY - currentTop, 2));
-        const speed = 0.6; 
+        const speed = 0.5; 
         const duration = dist / speed;
 
-        // Aplica movimento
         goose.style.transition = `left ${duration}ms linear, top ${duration}ms linear`;
-        
-        // Força reflow para garantir transição
-        goose.getBoundingClientRect();
+        goose.getBoundingClientRect(); // Force reflow
         
         goose.style.left = targetX + 'px';
         goose.style.top = targetY + 'px';
 
         await wait(duration);
         
-        // Para animação
         goose.classList.remove('goose-walking');
-        goose.style.transition = 'none'; // Reseta transição para movimentos instantâneos se precisar
+        goose.style.transition = 'none';
     };
 
-    // --- Roteiro do Caos ---
+    // --- ROTEIRO ---
 
-    // 1. Entrada Rápida
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    
-    // Aparece vindo da borda mais próxima
-    await walkTo(centerX, centerY);
+    // 1. Entrada
+    await walkTo(window.innerWidth / 2, window.innerHeight / 2);
     await honk("QUACK!");
     
-    // Alvos (Prioriza texto grande e cards)
-    const targets = Array.from(document.querySelectorAll('h1, h2, .rounded-lg, p, li, i, a'));
+    // 2. Caça aos elementos
+    const targets = Array.from(document.querySelectorAll('h1, h2, p, li, a, i, .rounded-lg'));
     
     for (const target of targets) {
         if (!target.isConnected || target.style.display === 'none') continue;
         const rect = target.getBoundingClientRect();
         
-        // Pula elementos invisíveis ou muito pequenos
         if (rect.width < 10 || rect.height < 10) continue;
 
         // Vai até o elemento
         await walkTo(rect.left + rect.width/2, rect.top + rect.height/2);
         
-        // Animação de "Puxar"
-        await honk("MINE!");
+        // Rouba
+        await honk("HONK!");
         
-        // Efeito visual no alvo
-        target.style.transition = 'all 0.4s ease-in';
-        target.style.transformOrigin = 'center';
-        target.style.transform = 'scale(0) rotate(180deg)';
+        target.style.transition = 'transform 0.3s, opacity 0.3s';
+        target.style.transform = 'scale(0) rotate(45deg)';
         target.style.opacity = '0';
         
-        await wait(200); // Espera rapidinho
-        target.style.display = 'none'; // Remove
+        await wait(150);
+        target.style.display = 'none';
     }
 
-    // Saída Triunfal
+    // 3. Saída
     await honk("BYE!");
     await walkTo(window.innerWidth + 200, window.innerHeight / 2);
 
-    // Tela Final Hacker
+    // 4. Tela Final
     document.body.innerHTML = '';
     Object.assign(document.body.style, {
-        background: '#000',
+        background: '#0a0a0f',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
         overflow: 'hidden',
-        color: '#0f0',
+        color: '#4ade80',
         fontFamily: 'monospace'
     });
 
     const h1 = document.createElement('h1');
-    h1.innerText = "SYSTEM SECURED BY GOOSE";
-    h1.style.fontSize = '3rem';
-    h1.style.textShadow = '0 0 10px #0f0';
+    h1.innerHTML = "SECURITY ALERT:<br>GOOSE PATROL ACTIVE";
+    h1.style.fontSize = '2.5rem';
+    h1.style.textAlign = 'center';
+    h1.style.marginBottom = '20px';
     document.body.appendChild(h1);
 
     const img = document.createElement('div');
     img.innerHTML = gooseSVG;
-    img.style.width = '200px';
-    img.style.height = '200px';
-    img.style.marginTop = '20px';
+    img.style.width = '150px';
+    img.style.height = '150px';
     document.body.appendChild(img);
 }
