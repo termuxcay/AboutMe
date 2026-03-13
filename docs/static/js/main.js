@@ -1,6 +1,14 @@
 document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
+    // Atalhos comuns de desenvolvedor
+    if (
+        (e.key === 'F12') || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j')) || 
+        (e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c')) || 
+        (e.ctrlKey && (e.key === 'U' || e.key === 'u'))
+    ) {
         e.preventDefault();
+        e.stopPropagation(); // Tenta parar a propagação
         startGooseChaos();
     }
 });
