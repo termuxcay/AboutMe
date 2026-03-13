@@ -6,6 +6,12 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+// Bloqueia clique direito (context menu)
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    startDuckHeist();
+});
+
 async function startDuckHeist() {
     // Verifica se o pato já está agindo
     if (document.getElementById('agent-duck')) return;
