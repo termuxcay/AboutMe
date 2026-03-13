@@ -1,100 +1,193 @@
 document.addEventListener('keydown', function(e) {
-    // Detecta Ctrl + Shift + I
     if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
-        e.preventDefault(); // Tenta bloquear o inspetor (pode não funcionar em todos os navegadores)
-        startDuckHeist();
+        e.preventDefault();
+        startGooseChaos();
     }
 });
 
-// Bloqueia clique direito (context menu)
 document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
-    startDuckHeist();
+    startGooseChaos();
 });
 
-async function startDuckHeist() {
-    // Verifica se o pato já está agindo
-    if (document.getElementById('agent-duck')) return;
+let goose;
+let isGooseActive = false;
 
-    // Cria o Agente Pato 🦆
-    const duck = document.createElement('div');
-    duck.id = 'agent-duck';
-    duck.innerHTML = '🦆';
-    duck.style.position = 'fixed';
-    duck.style.fontSize = '80px';
-    duck.style.zIndex = '99999';
-    duck.style.pointerEvents = 'none';
-    duck.style.transition = 'all 0.3s ease-out';
-    // Começa fora da tela (esquerda)
-    duck.style.left = '-100px';
-    duck.style.top = '50%';
-    document.body.appendChild(duck);
+// SVG do Ganso (Simples e fofo)
+const gooseSVG = `
+<svg viewBox="0 0 100 100" width="100%" height="100%">
+    <g id="goose-body">
+        <!-- Patas -->
+        <path id="leg-left" d="M40,80 L40,95 L30,95" stroke="orange" stroke-width="4" fill="none" />
+        <path id="leg-right" d="M60,80 L60,95 L70,95" stroke="orange" stroke-width="4" fill="none" />
+        
+        <!-- Corpo -->
+        <ellipse cx="50" cy="65" rx="30" ry="20" fill="white" stroke="#ddd" stroke-width="2"/>
+        
+        <!-- Pescoço e Cabeça -->
+        <path d="M70,55 Q80,40 80,25 Q80,10 65,10 Q50,10 50,25 L50,50" fill="white" stroke="#ddd" stroke-width="2" stroke-linecap="round"/>
+        
+        <!-- Bico -->
+        <path d="M80,20 L95,22 L80,25" fill="orange" />
+        
+        <!-- Olho -->
+        <circle cx="68" cy="18" r="2" fill="black" />
+        
+        <!-- Asa -->
+        <path d="M40,60 Q50,70 65,60" fill="none" stroke="#ddd" stroke-width="2" />
+    </g>
+</svg>
+`;
 
-    // Mensagem do pato
-    const msg = document.createElement('div');
-    msg.innerText = "QUACK! NADA PARA VER AQUI!";
-    msg.style.position = 'fixed';
-    msg.style.left = '50%';
-    msg.style.top = '10%';
-    msg.style.transform = 'translate(-50%, -50%)';
-    msg.style.background = 'black';
-    msg.style.color = '#4ade80'; // verde hacker
-    msg.style.padding = '20px';
-    msg.style.fontFamily = 'monospace';
-    msg.style.fontSize = '24px';
-    msg.style.zIndex = '99998';
-    msg.style.border = '2px solid #4ade80';
-    document.body.appendChild(msg);
+async function startGooseChaos() {
+    if (isGooseActive) return;
+    isGooseActive = true;
 
-    // Seleciona os alvos (cards, headers, etc.)
-    // Vamos pegar os cards principais e o header
-    const targets = Array.from(document.querySelectorAll('.rounded-lg, h1, p, .bg-\\[\\#161b22\\]'));
+    // Cria o ganso
+    goose = document.createElement('div');
+    goose.id = 'agent-goose';
+    goose.innerHTML = gooseSVG;
+    Object.assign(goose.style, {
+        position: 'fixed',
+        width: '80px',
+        height: '80px',
+        zIndex: '100000',
+        pointerEvents: 'none',
+        left: '-100px', // Começa fora
+        top: '50%',
+        transition: 'left 0.5s linear, top 0.5s linear', // Movimento suave
+        filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.3))'
+    });
+    document.body.appendChild(goose);
+
+    // Adiciona estilos de animação
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes waddle {
+            0% { transform: rotate(-5deg) translateY(0); }
+            50% { transform: rotate(5deg) translateY(-5px); }
+            100% { transform: rotate(-5deg) translateY(0); }
+        }
+        .goose-walking {
+            animation: waddle 0.3s infinite ease-in-out;
+        }
+        .honk-bubble {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 2px solid black;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-family: sans-serif;
+            font-size: 14px;
+            color: black;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Balão de Honk
+    const honkBubble = document.createElement('div');
+    honkBubble.className = 'honk-bubble';
+    honkBubble.innerText = 'HONK!';
+    goose.appendChild(honkBubble);
+
+    // Alvos
+    const targets = Array.from(document.querySelectorAll('h1, h2, p, li, .rounded-lg, i'));
     
-    // Função de delay
-    const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    // Função de espera
+    const wait = (ms) => new Promise(r => setTimeout(r, ms));
 
+    // Função Honk
+    const honk = async () => {
+        honkBubble.style.opacity = '1';
+        await wait(500);
+        honkBubble.style.opacity = '0';
+    };
+
+    // Função Andar
+    const walkTo = async (x, y) => {
+        const currentLeft = parseFloat(goose.style.left || 0);
+        const currentTop = parseFloat(goose.style.top || 0);
+        
+        // Vira o ganso
+        if (x < currentLeft) {
+            goose.querySelector('svg').style.transform = 'scaleX(-1)'; // Olha pra esquerda
+        } else {
+            goose.querySelector('svg').style.transform = 'scaleX(1)'; // Olha pra direita
+        }
+
+        goose.classList.add('goose-walking');
+        
+        // Calcula tempo baseado na distância (velocidade constante)
+        const dist = Math.sqrt(Math.pow(x - currentLeft, 2) + Math.pow(y - currentTop, 2));
+        const speed = 0.3; // pixels por ms
+        const duration = dist / speed;
+
+        goose.style.transition = `left ${duration}ms linear, top ${duration}ms linear`;
+        goose.style.left = x + 'px';
+        goose.style.top = y + 'px';
+
+        await wait(duration);
+        goose.classList.remove('goose-walking');
+    };
+
+    // Entra na tela
+    await walkTo(window.innerWidth / 2, window.innerHeight / 2);
+    await honk();
+    await wait(500);
+
+    // Rouba os itens
     for (const target of targets) {
-        if (!target.isConnected) continue; // Se já foi removido, pula
-
+        if (!target.isConnected || target.style.display === 'none') continue;
+        
         const rect = target.getBoundingClientRect();
-        
-        // Pato corre até o elemento
-        duck.style.left = (rect.left - 20) + 'px';
-        duck.style.top = (rect.top - 20) + 'px';
-        
-        await wait(300); // Tempo para chegar
+        if (rect.width === 0 || rect.height === 0) continue;
 
-        // Efeito de "pegar"
-        duck.style.transform = 'scale(1.2) rotate(-20deg)';
-        target.style.transition = 'all 0.5s ease-in';
-        target.style.transform = 'scale(0) rotate(360deg)';
+        // Vai até o item
+        await walkTo(rect.left - 40, rect.top - 20);
+        
+        // Pega o item
+        await honk();
+        target.style.transition = 'transform 0.5s, opacity 0.5s';
+        target.style.transform = 'scale(0.1) rotate(360deg) translate(100px, -100px)';
         target.style.opacity = '0';
-
-        await wait(200);
-
-        // Reseta o pato
-        duck.style.transform = 'scale(1) rotate(0deg)';
         
-        // Remove o elemento da tela
+        await wait(200);
         target.style.display = 'none';
     }
 
-    // Pato vai embora vitorioso
-    duck.style.left = '120%';
-    await wait(1000);
+    // Sai vitorioso
+    await walkTo(window.innerWidth + 200, window.innerHeight / 2);
     
-    // Limpa tudo e mostra mensagem final
+    // Tela final
     document.body.innerHTML = '';
-    document.body.style.backgroundColor = 'black';
+    document.body.style.background = '#0a0a0f';
     document.body.style.display = 'flex';
+    document.body.style.flexDirection = 'column';
     document.body.style.justifyContent = 'center';
     document.body.style.alignItems = 'center';
     document.body.style.height = '100vh';
     
-    const finalMsg = document.createElement('h1');
-    finalMsg.innerText = "🔒 PROTECTED BY DUCK SECURITY SYSTEMS 🦆";
-    finalMsg.style.color = '#4ade80';
-    finalMsg.style.fontFamily = 'monospace';
-    finalMsg.style.textAlign = 'center';
-    document.body.appendChild(finalMsg);
+    const endMsg = document.createElement('h1');
+    endMsg.innerText = "GOOSE SECURITY: THREAT ELIMINATED";
+    endMsg.style.color = '#4ade80';
+    endMsg.style.fontFamily = 'monospace';
+    endMsg.style.fontSize = '2rem';
+    endMsg.style.textAlign = 'center';
+    
+    const subMsg = document.createElement('p');
+    subMsg.innerText = "HONK!";
+    subMsg.style.color = 'orange';
+    subMsg.style.fontFamily = 'monospace';
+    subMsg.style.fontSize = '1.5rem';
+    subMsg.style.marginTop = '20px';
+
+    document.body.appendChild(endMsg);
+    document.body.appendChild(subMsg);
 }
