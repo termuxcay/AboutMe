@@ -1,0 +1,437 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #ec4899;
+    --primary-light: #f472b6;
+    --primary-dark: #db2777;
+    --primary-glow: rgba(236, 72, 153, 0.3);
+    --accent: #a855f7;
+    --bg-dark: #0a0a0f;
+}
+
+body {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    background: 
+        radial-gradient(ellipse at top, rgba(236, 72, 153, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, #0a0a0f 100%);
+    min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0a0f;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2a1a2e;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3a2a3e;
+}
+
+/* Scanline Effect */
+.scanline {
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    opacity: 0.3;
+    animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+}
+
+/* Cursor Blink */
+.cursor-blink {
+    animation: blink 1s step-end infinite;
+    color: var(--primary);
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* Glitch Text Effect */
+.glitch-text {
+    position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.glitch-text:hover::before {
+    animation: glitch-1 0.3s ease-in-out;
+    color: var(--primary);
+    opacity: 0.8;
+}
+
+.glitch-text:hover::after {
+    animation: glitch-2 0.3s ease-in-out;
+    color: var(--accent);
+    opacity: 0.8;
+}
+
+@keyframes glitch-1 {
+    0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 2px); }
+    20% { clip-path: inset(92% 0 1% 0); transform: translate(1px, -1px); }
+    40% { clip-path: inset(43% 0 1% 0); transform: translate(-1px, 2px); }
+    60% { clip-path: inset(25% 0 58% 0); transform: translate(2px, 1px); }
+    80% { clip-path: inset(54% 0 7% 0); transform: translate(-2px, -1px); }
+    100% { clip-path: inset(58% 0 43% 0); transform: translate(0); }
+}
+
+@keyframes glitch-2 {
+    0% { clip-path: inset(65% 0 13% 0); transform: translate(2px, -1px); }
+    20% { clip-path: inset(79% 0 14% 0); transform: translate(-1px, 2px); }
+    40% { clip-path: inset(48% 0 38% 0); transform: translate(1px, -2px); }
+    60% { clip-path: inset(33% 0 2% 0); transform: translate(-2px, 1px); }
+    80% { clip-path: inset(8% 0 87% 0); transform: translate(2px, 2px); }
+    100% { clip-path: inset(15% 0 69% 0); transform: translate(0); }
+}
+
+/* Fade Up Animation */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+    animation: fadeUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* Terminal Window Glow */
+.terminal-window {
+    box-shadow: 
+        0 0 40px rgba(236, 72, 153, 0.05),
+        0 0 80px rgba(236, 72, 153, 0.02),
+        inset 0 1px 0 rgba(236, 72, 153, 0.1);
+}
+
+.terminal-window:hover {
+    box-shadow: 
+        0 0 60px rgba(236, 72, 153, 0.08),
+        0 0 120px rgba(236, 72, 153, 0.04),
+        inset 0 1px 0 rgba(236, 72, 153, 0.15);
+}
+
+/* Stat Card Animation */
+.stat-card {
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Tag Hover */
+.tag {
+    transition: all 0.2s ease;
+}
+
+.tag:hover {
+    transform: scale(1.05);
+}
+
+/* Matrix Canvas */
+#matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Selection Style */
+::selection {
+    background: rgba(236, 72, 153, 0.3);
+    color: #ffffff;
+}
+
+::-moz-selection {
+    background: rgba(236, 72, 153, 0.3);
+    color: #ffffff;
+}
+
+/* Focus Style */
+:focus {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid rgba(236, 72, 153, 0.5);
+    outline-offset: 2px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .scanline {
+        opacity: 0.15;
+    }
+    
+    pre {
+        font-size: 6px !important;
+    }
+}
+
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Loading Animation */
+@keyframes loading {
+    0% { width: 0; }
+    100% { width: 100%; }
+}
+
+.loading-bar {
+    height: 2px;
+    background: linear-gradient(90deg, #ec4899, #a855f7, #ec4899);
+    animation: loading 2s ease-out forwards;
+}
+
+/* Konami Code Overlay */
+.konami-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.konami-overlay.active {
+    display: flex;
+    animation: konamiFadeIn 0.3s ease-out;
+}
+
+@keyframes konamiFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.konami-text {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-shadow: 
+        0 0 20px var(--primary-glow),
+        0 0 40px var(--primary-glow),
+        0 0 80px var(--primary-glow);
+    animation: konamiPulse 1s ease-in-out infinite;
+    text-align: center;
+}
+
+@keyframes konamiPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.konami-subtext {
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-top: 1rem;
+    animation: konamiBlink 0.5s ease-in-out infinite;
+}
+
+@keyframes konamiBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Hacker Effect - Screen Shake */
+@keyframes screenShake {
+    0%, 100% { transform: translate(0); }
+    10% { transform: translate(-5px, -5px); }
+    20% { transform: translate(5px, 5px); }
+    30% { transform: translate(-5px, 5px); }
+    40% { transform: translate(5px, -5px); }
+    50% { transform: translate(-3px, -3px); }
+    60% { transform: translate(3px, 3px); }
+    70% { transform: translate(-3px, 3px); }
+    80% { transform: translate(3px, -3px); }
+    90% { transform: translate(-2px, -2px); }
+}
+
+.screen-shake {
+    animation: screenShake 0.5s ease-in-out;
+}
+
+/* Hacker Effect - Glitch Layers */
+.glitch-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0;
+}
+
+.glitch-layer.active {
+    opacity: 1;
+    animation: glitchLayer 0.2s ease-in-out;
+}
+
+@keyframes glitchLayer {
+    0% { 
+        opacity: 0;
+        background: linear-gradient(45deg, transparent 40%, var(--primary-glow) 50%, transparent 60%);
+    }
+    50% { 
+        opacity: 1;
+        background: linear-gradient(45deg, transparent 40%, var(--accent) 50%, transparent 60%);
+    }
+    100% { 
+        opacity: 0;
+        background: linear-gradient(45deg, transparent 40%, var(--primary-glow) 50%, transparent 60%);
+    }
+}
+
+/* Code Rain Effect */
+.code-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9997;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.code-rain.active {
+    opacity: 1;
+}
+
+.code-rain span {
+    position: absolute;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--primary);
+    text-shadow: 0 0 10px var(--primary-glow);
+    animation: codeFall linear forwards;
+}
+
+@keyframes codeFall {
+    0% {
+        transform: translateY(-100px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+/* Binary Flash Effect */
+.binary-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9996;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(236, 72, 153, 0.1) 2px,
+        rgba(236, 72, 153, 0.1) 4px
+    );
+    opacity: 0;
+}
+
+.binary-flash.active {
+    animation: binaryFlash 0.1s ease-in-out;
+}
+
+@keyframes binaryFlash {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Neon Border */
+.neon-border {
+    position: relative;
+}
+
+.neon-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, #ec4899, #a855f7, #ec4899);
+    background-size: 300% 300%;
+    animation: borderFlow 4s ease infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.neon-border:hover::before {
+    opacity: 1;
+}
+
+@keyframes borderFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Text Glow */
+.text-glow-pink {
+    text-shadow: 0 0 10px rgba(236, 72, 153, 0.5),
+                 0 0 20px rgba(236, 72, 153, 0.3),
+                 0 0 30px rgba(236, 72, 153, 0.2);
+}

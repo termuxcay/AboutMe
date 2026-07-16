@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MrTermux | Security Researcher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#0a0a0f] text-gray-300 antialiased overflow-x-hidden">
+    <!-- Matrix Rain Canvas -->
+    <canvas id="matrix-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-20"></canvas>
+
+    <!-- Scanline Effect -->
+    <div class="scanline fixed top-0 left-0 w-full h-full pointer-events-none z-40"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-pink-500/10">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3 group cursor-pointer">
+                <div class="w-10 h-10 rounded-lg bg-pink-500/10 border border-pink-500/30 flex items-center justify-center group-hover:bg-pink-500/20 group-hover:border-pink-500/50 transition-all duration-300">
+                    <i class="fa-solid fa-terminal text-pink-400 text-lg group-hover:text-pink-300"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-white tracking-tight block text-sm leading-tight">MrTermux</span>
+                    <span class="text-[10px] text-pink-500/60 font-mono">root@system:~#</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="#" class="text-sm text-gray-400 hover:text-pink-400 transition-colors font-mono">
+                    <span class="text-pink-500 mr-1">~</span>/home
+                </a>
+                <div class="hidden md:flex items-center gap-2 text-xs text-gray-500 font-mono">
+                    <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span>
+                    <span>ONLINE</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 pb-16 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 md:px-6">
+
+            <!-- Hero Section -->
+            <div class="mb-16 relative">
+                <div class="terminal-window rounded-xl bg-[#0d1117]/90 border border-pink-500/20 shadow-2xl shadow-pink-500/5 overflow-hidden backdrop-blur-sm">
+                    <!-- Terminal Header -->
+                    <div class="bg-[#161b22] px-4 py-3 flex items-center justify-between border-b border-pink-500/10">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors cursor-pointer"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/80 hover:bg-yellow-500 transition-colors cursor-pointer"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/80 hover:bg-green-500 transition-colors cursor-pointer"></div>
+                        </div>
+                        <div class="text-xs text-gray-500 font-mono flex items-center gap-2">
+                            <i class="fa-solid fa-lock text-pink-500/60"></i>
+                            <span>ssh mrtermux@system</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <div class="w-1 h-1 rounded-full bg-pink-500/40"></div>
+                            <div class="w-1 h-1 rounded-full bg-pink-500/40"></div>
+                            <div class="w-1 h-1 rounded-full bg-pink-500/40"></div>
+                        </div>
+                    </div>
+
+                    <!-- Terminal Body -->
+                    <div class="p-6 md:p-8">
+                        <!-- ASCII Art Header -->
+                        <pre class="text-pink-500/70 text-[8px] md:text-xs mb-6 font-mono leading-tight select-none">
+ ██████╗ ███╗   ███╗██████╗ ██╗   ██╗██████╗  █████╗ ████████╗███████╗██████╗ 
+██╔════╝ ████╗ ████║██╔══██╗╚██╗ ██╔╝██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██╔══██╗
+██║  ███╗██╔████╔██║██████╔╝ ╚████╔╝ ██████╔╝███████║   ██║   █████╗  ██║  ██║
+██║   ██║██║╚██╔╝██║██╔═══╝   ╚██╔╝  ██╔══██╗██╔══██║   ██║   ██╔══╝  ██║  ██║
+╚██████╔╝██║ ╚═╝ ██║██║        ██║   ██║  ██║██║  ██║   ██║   ███████╗██████╔╝
+ ╚═════╝ ╚═╝     ╚═╝╚═╝        ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═════╝ 
+                        </pre>
+
+                        <!-- Profile Section -->
+                        <div class="flex flex-col md:flex-row items-start gap-6 mb-8">
+                            <div class="relative group">
+                                <div class="w-28 h-28 rounded-xl border-2 border-pink-500/30 p-1 bg-gradient-to-br from-pink-500/10 to-transparent group-hover:from-pink-500/20 transition-all duration-500">
+                                    <div class="w-full h-full rounded-lg bg-[#0d1117] flex items-center justify-center overflow-hidden relative">
+                                        <i class="fa-solid fa-user-ninja text-4xl text-pink-400 group-hover:text-pink-300 transition-colors"></i>
+                                        <div class="absolute inset-0 bg-gradient-to-t from-pink-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    </div>
+                                </div>
+                                <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-pink-500 rounded-full border-2 border-[#0d1117] flex items-center justify-center">
+                                    <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                                </div>
+                            </div>
+
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h1 class="text-3xl md:text-4xl font-bold text-white glitch-text" data-text="MrTermux">MrTermux</h1>
+                                    <span class="px-2 py-1 text-[10px] font-mono bg-pink-500/10 text-pink-400 border border-pink-500/30 rounded uppercase tracking-wider">root</span>
+                                </div>
+                                <p class="text-gray-500 font-mono text-sm mb-4">
+                                    <span class="text-pink-500">$</span> whoami
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="tag px-3 py-1 text-xs font-mono rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20 hover:bg-pink-500/20 transition-colors cursor-default">Go</span>
+                                    <span class="tag px-3 py-1 text-xs font-mono rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 hover:bg-purple-500/20 transition-colors cursor-default">Python</span>
+                                    <span class="tag px-3 py-1 text-xs font-mono rounded-full bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 hover:bg-fuchsia-500/20 transition-colors cursor-default">Security</span>
+                                    <span class="tag px-3 py-1 text-xs font-mono rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 transition-colors cursor-default">Bug Hunter</span>
+                                    <span class="tag px-3 py-1 text-xs font-mono rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20 hover:bg-pink-500/20 transition-colors cursor-default">Automation</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terminal Output -->
+                        <div class="space-y-2 text-sm font-mono">
+                            <p class="text-gray-500"><span class="text-pink-500">root@mrtermux</span>:<span class="text-purple-400">~</span># <span id="typing-text" class="text-pink-400"></span><span class="cursor-blink">_</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                <div class="stat-card bg-[#0d1117]/80 border border-pink-500/10 rounded-xl p-4 text-center hover:border-pink-500/30 transition-all duration-300 backdrop-blur-sm group">
+                    <div class="text-2xl md:text-3xl font-bold text-pink-400 mb-1 font-mono group-hover:text-pink-300 transition-colors" data-count="10">0</div>
+                    <div class="text-xs text-gray-500 font-mono uppercase tracking-wider">+ Anos Exp.</div>
+                </div>
+                <div class="stat-card bg-[#0d1117]/80 border border-pink-500/10 rounded-xl p-4 text-center hover:border-pink-500/30 transition-all duration-300 backdrop-blur-sm group">
+                    <div class="text-2xl md:text-3xl font-bold text-purple-400 mb-1 font-mono group-hover:text-purple-300 transition-colors" data-count="15">0</div>
+                    <div class="text-xs text-gray-500 font-mono uppercase tracking-wider">Projetos</div>
+                </div>
+                <div class="stat-card bg-[#0d1117]/80 border border-pink-500/10 rounded-xl p-4 text-center hover:border-pink-500/30 transition-all duration-300 backdrop-blur-sm group">
+                    <div class="text-2xl md:text-3xl font-bold text-fuchsia-400 mb-1 font-mono group-hover:text-fuchsia-300 transition-colors" data-count="50">0</div>
+                    <div class="text-xs text-gray-500 font-mono uppercase tracking-wider">+ Bugs</div>
+                </div>
+                <div class="stat-card bg-[#0d1117]/80 border border-pink-500/10 rounded-xl p-4 text-center hover:border-pink-500/30 transition-all duration-300 backdrop-blur-sm group">
+                    <div class="text-2xl md:text-3xl font-bold text-rose-400 mb-1 font-mono group-hover:text-rose-300 transition-colors" data-count="99">0</div>
+                    <div class="text-xs text-gray-500 font-mono uppercase tracking-wider">Coffee Cups</div>
+                </div>
+            </div>
+
+            <!-- Main Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                <!-- About Me - Full Width -->
+                <div class="lg:col-span-2">
+                    <div class="h-full bg-[#0d1117]/80 rounded-xl border border-pink-500/10 p-6 hover:border-pink-500/30 transition-all duration-500 backdrop-blur-sm group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-fuchsia-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <h2 class="text-xl font-bold text-pink-400 mb-6 flex items-center gap-3 font-mono">
+                            <div class="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center border border-pink-500/20">
+                                <i class="fa-solid fa-user-secret text-sm"></i>
+                            </div>
+                            <span><span class="text-pink-500/60">$</span> cat about.txt</span>
+                        </h2>
+                        <div class="space-y-4 text-gray-300 text-sm leading-relaxed">
+                            <p class="flex items-start gap-3">
+                                <span class="text-pink-500 mt-0.5 shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                <span>Security Researcher e Desenvolvedor com foco em <span class="text-white font-semibold bg-pink-500/10 px-1.5 py-0.5 rounded">Go</span> e <span class="text-white font-semibold bg-purple-500/10 px-1.5 py-0.5 rounded">Python</span>. Especializado em análise de vulnerabilidades e engenharia reversa.</span>
+                            </p>
+                            <p class="flex items-start gap-3">
+                                <span class="text-pink-500 mt-0.5 shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                <span>Mais de uma década explorando o mundo da segurança cibernética, sempre buscando entender como os sistemas falham para construir soluções mais robustas.</span>
+                            </p>
+                            <p class="flex items-start gap-3">
+                                <span class="text-pink-500 mt-0.5 shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                <span>Autista nível 2 — o hiperfoco em tecnologia transforma desafio em superpoder. Cada bug encontrado é uma lição aprendida.</span>
+                            </p>
+                            <p class="flex items-start gap-3">
+                                <span class="text-pink-500 mt-0.5 shrink-0"><i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+                                <span>Acredito que a melhor forma de proteger um sistema é entendê-lo profundamente — do hardware ao application layer.</span>
+                            </p>
+                        </div>
+
+                        <!-- Quote -->
+                        <div class="mt-6 p-4 bg-black/30 rounded-lg border-l-2 border-pink-500 font-mono text-sm">
+                            <p class="text-gray-400 italic">"In a world full of script kiddies, be a researcher."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Status -->
+                <div class="lg:row-span-2">
+                    <div class="h-full bg-[#0d1117]/80 rounded-xl border border-pink-500/10 p-6 hover:border-pink-500/30 transition-all duration-500 backdrop-blur-sm">
+                        <h2 class="text-xl font-bold text-pink-400 mb-6 flex items-center gap-3 font-mono">
+                            <div class="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center border border-pink-500/20">
+                                <i class="fa-solid fa-signal text-sm"></i>
+                            </div>
+                            <span><span class="text-pink-500/60">$</span> status</span>
+                        </h2>
+
+                        <div class="space-y-6">
+                            <div class="p-3 bg-black/20 rounded-lg border border-pink-500/5 hover:border-pink-500/20 transition-colors">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span>
+                                    <span class="text-xs text-gray-500 font-mono uppercase tracking-wider">Status</span>
+                                </div>
+                                <p class="text-pink-400 font-mono text-sm">Online & Operational</p>
+                            </div>
+
+                            <div class="p-3 bg-black/20 rounded-lg border border-pink-500/5 hover:border-pink-500/20 transition-colors">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                                    <span class="text-xs text-gray-500 font-mono uppercase tracking-wider">Current Project</span>
+                                </div>
+                                <a href="#" class="text-purple-400 font-mono text-sm hover:text-purple-300 transition-colors flex items-center gap-2">
+                                    <i class="fa-brands fa-github"></i> AstFlye
+                                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                </a>
+                            </div>
+
+                            <div class="p-3 bg-black/20 rounded-lg border border-pink-500/5 hover:border-pink-500/20 transition-colors">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="w-2 h-2 rounded-full bg-fuchsia-500"></span>
+                                    <span class="text-xs text-gray-500 font-mono uppercase tracking-wider">Focus</span>
+                                </div>
+                                <p class="text-fuchsia-400 font-mono text-sm">Security Research</p>
+                            </div>
+
+                            <div class="p-3 bg-black/20 rounded-lg border border-pink-500/5 hover:border-pink-500/20 transition-colors">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                                    <span class="text-xs text-gray-500 font-mono uppercase tracking-wider">Mode</span>
+                                </div>
+                                <p class="text-rose-400 font-mono text-sm">Building & Learning</p>
+                            </div>
+
+                            <div class="p-3 bg-black/20 rounded-lg border border-pink-500/5 hover:border-pink-500/20 transition-colors">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                    <span class="text-xs text-gray-500 font-mono uppercase tracking-wider">Availability</span>
+                                </div>
+                                <p class="text-red-400 font-mono text-sm">Busy but available</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tech Stack -->
+                <div>
+                    <div class="h-full bg-[#0d1117]/80 rounded-xl border border-pink-500/10 p-6 hover:border-pink-500/30 transition-all duration-500 backdrop-blur-sm group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <h2 class="text-xl font-bold text-pink-400 mb-6 flex items-center gap-3 font-mono">
+                            <div class="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center border border-pink-500/20">
+                                <i class="fa-solid fa-microchip text-sm"></i>
+                            </div>
+                            <span><span class="text-pink-500/60">$</span> ls tech/</span>
+                        </h2>
+                        <ul class="space-y-3 text-gray-300 font-mono text-sm">
+                            <li class="flex items-center gap-3 p-2 rounded-lg hover:bg-pink-500/5 transition-colors group/item">
+                                <div class="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center border border-pink-500/20 group-hover/item:bg-pink-500/20 transition-colors">
+                                    <i class="fa-brands fa-golang text-pink-400 text-sm"></i>
+                                </div>
+                                <div>
+                                    <span class="text-white font-medium">Go</span>
+                                    <span class="text-gray-600 text-xs block">Primary Language</span>
+                                </div>
+                            </li>
+                            <li class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-500/5 transition-colors group/item">
+                                <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center border border-purple-500/20 group-hover/item:bg-purple-500/20 transition-colors">
+                                    <i class="fa-brands fa-python text-purple-400 text-sm"></i>
+                                </div>
+                                <div>
+                                    <span class="text-white font-medium">Python</span>
+                                    <span class="text-gray-600 text-xs block">Automation & Scripts</span>
+                                </div>
+                            </li>
+                            <li class="flex items-center gap-3 p-2 rounded-lg hover:bg-fuchsia-500/5 transition-colors group/item">
+                                <div class="w-8 h-8 rounded-lg bg-fuchsia-500/10 flex items-center justify-center border border-fuchsia-500/20 group-hover/item:bg-fuchsia-500/20 transition-colors">
+                                    <i class="fa-solid fa-robot text-fuchsia-400 text-sm"></i>
+                                </div>
+                                <div>
+                                    <span class="text-white font-medium">AI / ML</span>
+                                    <span class="text-gray-600 text-xs block">Intelligent Systems</span>
+                                </div>
+                            </li>
+                            <li class="flex items-center gap-3 p-2 rounded-lg hover:bg-rose-500/5 transition-colors group/item">
+                                <div class="w-8 h-8 rounded-lg bg-rose-500/10 flex items-center justify-center border border-rose-500/20 group-hover/item:bg-rose-500/20 transition-colors">
+                                    <i class="fa-solid fa-shield-halved text-rose-400 text-sm"></i>
+                                </div>
+                                <div>
+                                    <span class="text-white font-medium">Security</span>
+                                    <span class="text-gray-600 text-xs block">Pentest & Analysis</span>
+                                </div>
+                            </li>
+                            <li class="flex items-center gap-3 p-2 rounded-lg hover:bg-pink-500/5 transition-colors group/item">
+                                <div class="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center border border-pink-500/20 group-hover/item:bg-pink-500/20 transition-colors">
+                                    <i class="fa-solid fa-server text-pink-400 text-sm"></i>
+                                </div>
+                                <div>
+                                    <span class="text-white font-medium">Backend</span>
+                                    <span class="text-gray-600 text-xs block">APIs & Systems</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Interests -->
+                <div>
+                    <div class="h-full bg-[#0d1117]/80 rounded-xl border border-pink-500/10 p-6 hover:border-pink-500/30 transition-all duration-500 backdrop-blur-sm group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <h2 class="text-xl font-bold text-purple-400 mb-6 flex items-center gap-3 font-mono">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center border border-purple-500/20">
+                                <i class="fa-solid fa-crosshairs text-sm"></i>
+                            </div>
+                            <span><span class="text-purple-500/60">$</span> cat interests.log</span>
+                        </h2>
+                        <ul class="space-y-3 text-gray-300 font-mono text-sm">
+                            <li class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-500/5 transition-colors group/item">
+                                <div class="w-6 h-6 rounded bg-purple-500/10 flex items-center justify-center border border-purple-500/20 group-hover/item:bg-purple-500/20 transition-colors">
+                                    <i class="fa-solid fa-bug text-purple-400 text-[10px]"></i>
+                                </div>
+                                <span>Bug Hunting & VDP</span>
+                            </li>
+                            <li class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-500/5 transition-colors group/item">
+                                <div class="w-6 h-6 rounded bg-purple-500/10 flex items-center justify-center border border-purple-500/20 group-hover/item:bg-purple-500/20 transition-colors">
+                                    <i class="fa-solid fa-lock text-purple-400 text-[10px]"></i>
+                                </div>
+                                <span>Vulnerability Research</span>
+                            </li>
+                            <li class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-500/5 transition-colors group/item">
+                                <div class="w-6 h-6 rounded bg-purple-500/10 flex items-center justify-center border border-purple-500/20 group-hover/item:bg-purple-500/20 transition-colors">
+                                    <i class="fa-solid fa-magnifying-glass text-purple-400 text-[10px]"></i>
+                                </div>
+                                <span>Reverse Engineering</span>
+                            </li>
+                            <li class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-500/5 transition-colors group/item">
+                                <div class="w-6 h-6 rounded bg-purple-500/10 flex items-center justify-center border border-purple-500/20 group-hover/item:bg-purple-500/20 transition-colors">
+                                    <i class="fa-solid fa-terminal text-purple-400 text-[10px]"></i>
+                                </div>
+                                <span>System Exploitation</span>
+                            </li>
+                            <li class="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-500/5 transition-colors group/item">
+                                <div class="w-6 h-6 rounded bg-purple-500/10 flex items-center justify-center border border-purple-500/20 group-hover/item:bg-purple-500/20 transition-colors">
+                                    <i class="fa-solid fa-network-wired text-purple-400 text-[10px]"></i>
+                                </div>
+                                <span>Network Analysis</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Random Facts -->
+                <div>
+                    <div class="h-full bg-[#0d1117]/80 rounded-xl border border-pink-500/10 p-6 hover:border-pink-500/30 transition-all duration-500 backdrop-blur-sm group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-500 to-rose-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <h2 class="text-xl font-bold text-pink-400 mb-6 flex items-center gap-3 font-mono">
+                            <div class="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center border border-pink-500/20">
+                                <i class="fa-solid fa-terminal text-sm"></i>
+                            </div>
+                            <span><span class="text-pink-500/60">$</span> neofetch</span>
+                        </h2>
+                        <ul class="space-y-3 text-gray-300 font-mono text-sm">
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-500 mt-0.5"><i class="fa-solid fa-database text-[10px]"></i></span>
+                                <span>+10 anos explorando o universo da segurança</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-500 mt-0.5"><i class="fa-solid fa-brain text-[10px]"></i></span>
+                                <span>Cada sistema tem uma história para contar</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-500 mt-0.5"><i class="fa-solid fa-code text-[10px]"></i></span>
+                                <span>Criar ferramentas é minha terapia</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-500 mt-0.5"><i class="fa-solid fa-mug-hot text-[10px]"></i></span>
+                                <span>Coffee > Sleep (always)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-pink-500 mt-0.5"><i class="fa-solid fa-quote-left text-[10px]"></i></span>
+                                <span>"If it has a bug, I'll find it."</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Status -->
+            <div class="mt-12 flex flex-col md:flex-row items-center justify-between text-xs text-gray-600 font-mono border-t border-pink-500/10 pt-6 gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span>
+                    <span>session: <span class="text-pink-400">active</span></span>
+                    <span class="text-gray-700">|</span>
+                    <span>uptime: <span id="uptime" class="text-pink-400">00:00:00</span></span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span>encryption: <span class="text-pink-400">AES-256</span></span>
+                    <span class="text-gray-700">|</span>
+                    <span>protocol: <span class="text-pink-400">SSH</span></span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-pink-500/10 py-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3 text-xs text-gray-500 font-mono">
+                    <span class="text-pink-500">$</span>
+                    <span>MrTermux Profile v2.0</span>
+                    <span class="text-gray-600">|</span>
+                    <span>Built with <span class="text-pink-400">Go</span> + <span class="text-purple-400">Fiber</span></span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="https://github.com/Mrtermux" target="_blank" class="text-gray-500 hover:text-pink-400 transition-colors">
+                        <i class="fa-brands fa-github text-lg"></i>
+                    </a>
+                    <a href="https://t.me/Mrtermux" target="_blank" class="text-gray-500 hover:text-purple-400 transition-colors">
+                        <i class="fa-brands fa-telegram text-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
